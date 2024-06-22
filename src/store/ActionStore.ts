@@ -1,14 +1,14 @@
 import { Item } from "@/type/types";
 import { defineStore } from "pinia";
 import { setDocumentRandomId } from "@/firebase/Functions";
-import { useMainStore } from "./MainStore";
+
 import { ref } from "vue";
 export const useActionStore = defineStore('actionStore',()=>{
     const imageUrl = ref()
     
     const addItem = async  (object:Item)=>{
         try{
-            const mainStore = useMainStore()
+          
             console.log(object,'here')
             await setDocumentRandomId('items',{
                 name: object.name,

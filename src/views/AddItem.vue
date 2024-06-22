@@ -61,7 +61,7 @@
 
 <script setup >
 import { ref } from 'vue';
-import {Item}from "@/type/types"
+
 import { useActionStore } from '@/store/ActionStore';
 import { useMainStore } from '@/store/MainStore';
 import { uploadImage } from '@/firebase/Functions';
@@ -70,7 +70,7 @@ import { uploadImage } from '@/firebase/Functions';
 
 const actionStore = useActionStore()
 const mainStore = useMainStore()
-const form = ref<Item>({
+const form = ({
   description: '',
   id: mainStore.user.uid,
   name: '',

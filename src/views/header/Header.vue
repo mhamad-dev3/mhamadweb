@@ -26,10 +26,10 @@
   </template>
   
   <script setup lang="ts">
-  import { useMainStore } from '@/store/MainStore';
+ 
   import { useRouter } from 'vue-router';
   
-  const mainStore = useMainStore();
+ 
   const router = useRouter();
   
   const logout = () => {
