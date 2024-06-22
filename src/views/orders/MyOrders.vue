@@ -1,30 +1,38 @@
 <template>
-    <Header></Header>
-    <div class="p-8 bg-slate-600 h-screen">
-      <h1 class="text-4xl font-bold mb-8">My Orders</h1>
-      <div v-if="orders.length === 0" class="text-gray-600">No orders found.</div>
-      <div v-else>
-        <div v-for="order in orders" :key="order.orderId" class="bg-white shadow-md rounded-lg p-4 mb-4">
-          <div class="flex items-center justify-between mb-4">
-            <div class="flex items-center space-x-4">
-              <img :src="order.image" alt="Product Image" class="h-16 w-16 object-cover rounded-md">
-              <div>
-                <h2 class="text-lg font-semibold">{{ order.name }}</h2>
-                <!-- <p class="text-gray-600">Order ID: {{ order.orderId }}</p> -->
-                <p class="text-gray-600">Status: <span class="font-semibold">{{ order.order.status }}</span></p>
-              </div>
-            </div>
-            <button v-if="order.order.status === 'pending'" @click="cancelOrder(order.order.id)" class="bg-red-500 text-white px-3 py-1 rounded-md">Cancel</button>
-          </div>
+  <div class="min-h-screen bg-blue-50">
+    <Header />
+    <div class="container mx-auto py-8">
+      <h1 class="text-3xl font-bold text-blue-700 mb-4">My Orders</h1>
+      <div v-if="orders.length === 0" class="text-center text-gray-500">
+        No orders found.
+      </div>
+      <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div
+          v-for="order in orders"
+          :key="order.order.id"
+          class="bg-white p-6 rounded-lg shadow-md"
+        >
+          <h2 class="text-xl font-semibold text-gray-800 mb-2">{{ order.name }}</h2>
+          <img :src="order.image" class=" h-36 w-full rounded-lg" alt="">
+          <p class="text-gray-600 mb-4">{{ order.description }}</p>
+          <p class="text-gray-500 mb-4">Status: {{ order.order.status }}</p>
+          <button
+            @click="cancelOrder(order.order.id)"
+            class="w-full bg-red-600 text-white py-2 rounded-md hover:bg-red-700 transition"
+          >
+            Cancel Order
+          </button>
         </div>
       </div>
     </div>
-  </template>
+  </div>
+</template>
+
   
- <script setup lang="ts">
+ <script setup>
   import { ref, onMounted } from 'vue';
   import { useMainStore } from '@/store/MainStore';
-  import { getDocument, queryCollectionByField, updateRequestStatus } from '@/firebase/Functions'; // Adjust import path as per your project structure
+  import { deleteItems, getDocument, queryCollectionByField, updateRequestStatus } from '@/firebase/Functions'; // Adjust import path as per your project structure
 import Header from '../header/Header.vue';
   const mainStore = useMainStore();
   const orders = ref([]);
@@ -35,7 +43,7 @@ import Header from '../header/Header.vue';
       const fetchedOrders = await queryCollectionByField('orders', 'userId', mainStore.user.uid);
       // Enhance fetched orders with item details
       const ordersWithItems = await Promise.all(
-        fetchedOrders.map(async (order: any) => {
+        fetchedOrders.map(async (order) => {
           const item = await getItemDetails(order.itemId);
           return { order, ...item };
         })
@@ -46,7 +54,7 @@ import Header from '../header/Header.vue';
     }
   });
 
-  const getItemDetails = async (itemId: string) => {
+  const getItemDetails = async (itemId) => {
     try {
         console.log(itemId,'d')
       const item = await getDocument('items', itemId);
@@ -57,17 +65,18 @@ import Header from '../header/Header.vue';
     }
   };
 
-  const cancelOrder = async (orderId: string) => {
+  const cancelOrder = async (orderId) => {
+
     try {
-      console.log(`Cancelling order ${orderId}`);
-      await updateOrderStatus(orderId, 'cancelled');
+    
+      await deleteItems('orders',orderId);
       // Optionally update local state or notify user
     } catch (error) {
       console.error('Error cancelling order:', error.message);
     }
   };
 
-  const updateOrderStatus = async (orderId: string, newStatus: string) => {
+  const updateOrderStatus = async (orderId, newStatus) => {
     try {
       await updateRequestStatus('orders', orderId, { status: newStatus });
       console.log(`Order ${orderId} updated with status: ${newStatus}`);

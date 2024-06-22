@@ -58,7 +58,7 @@
         </div>
         <div class="ml-4">
           <h3 class="text-lg font-semibold">Profile</h3>
-          <p class="text-gray-600">Manage Profiel</p>
+          <p class="text-gray-600">coming soon</p>
         </div>
       </div>
     </div>

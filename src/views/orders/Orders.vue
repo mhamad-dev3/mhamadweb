@@ -1,41 +1,43 @@
 <template>
-  <Header></Header>
-    <div class="p-4 bg-slate-600 h-screen">
-      <h1 class="text-2xl font-bold mb-4">Requests for Your Items</h1>
-      <div v-if="requests.length === 0" class="text-gray-600">No requests found.</div>
-      <div v-else>
-        <div v-for="request in requests" :key="request.id" class="bg-white shadow-md rounded-lg p-4 mb-4">
-          <div class="flex items-center justify-between">
-            <!-- Item Details -->
-            <div>
-              <h2 class="text-lg font-semibold">{{ request.product.name }}</h2>
-              <p class="text-gray-600">{{ request.product.description }}</p>
-              <p class="text-gray-600">Category: {{ request.product.category }}</p>
-            </div>
-            <!-- User Details -->
-            <div>
-              <h3 class="text-lg font-semibold">{{ request.user.name }}</h3>
-              <p class="text-gray-600">{{ request.user.email }}</p>
-            </div>
-            <!-- Request Actions -->
-            <div>
-              <p>Status: <span :class="getStatusColor(request.status)" class="font-semibold">{{ request.status }}</span></p>
-              <template v-if="request.status === 'pending'">
-                <button @click="changeRequestStatus(request.id, 'approved')" class="bg-green-500 text-white px-3 py-1 rounded-md">Approve</button>
-                <button @click="changeRequestStatus(request.id, 'rejected')" class="bg-red-500 text-white px-3 py-1 rounded-md ml-2">Reject</button>
-              </template>
-              <template v-else-if="request.status === 'approved'">
-                <button @click="changeRequestStatus(request.id, 'fulfilled')" class="bg-blue-500 text-white px-3 py-1 rounded-md">Fulfill</button>
-              </template>
-              <!-- Add more status transitions as needed -->
-            </div>
+  <div class="min-h-screen bg-blue-50">
+    <Header />
+    <div class="container mx-auto py-8">
+      <h1 class="text-3xl font-bold text-blue-700 mb-4">Requests for Your Items</h1>
+      <div v-if="requests.length === 0" class="text-center text-gray-500">
+        No requests found.
+      </div>
+      <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div
+          v-for="request in requests"
+          :key="request.id"
+          class="bg-white p-6 rounded-lg shadow-md"
+        >
+          <h2 class="text-xl font-semibold text-gray-800 mb-2">{{ request.product.name }}</h2>
+          <p class="text-gray-600 mb-2">Requested by: {{ request.user.name }}</p>
+          <p class="text-gray-600 mb-4">{{ request.product.description }}</p>
+          <p :class="getStatusColor(request.status) + ' mb-4'">Status: {{ request.status }}</p>
+          <div class="flex justify-between">
+            <button
+              @click="changeRequestStatus(request.id, 'approved')"
+              class="bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-700 transition"
+            >
+              Approve
+            </button>
+            <button
+              @click="changeRequestStatus(request.id, 'rejected')"
+              class="bg-red-600 text-white py-2 px-4 rounded-md hover:bg-red-700 transition"
+            >
+              Reject
+            </button>
           </div>
         </div>
       </div>
     </div>
-  </template>
+  </div>
+</template>
+
   
-  <script setup lang="ts">
+  <script setup>
   import { ref, onMounted } from 'vue';
   import { useMainStore } from '@/store/MainStore';
   import { queryCollectionByField, setDocument, getDocument,updateRequestStatus } from '@/firebase/Functions'; // Adjust import path as per your project structure
@@ -64,7 +66,7 @@
     }
   });
   
-  const changeRequestStatus = async (requestId: string, newStatus: string) => {
+  const changeRequestStatus = async (requestId, newStatus) => {
     console.log(requestId,'kk')
     try {
       await updateRequestStatus('orders', requestId, { status: newStatus });

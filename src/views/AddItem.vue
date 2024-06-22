@@ -59,7 +59,7 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup >
 import { ref } from 'vue';
 import {Item}from "@/type/types"
 import { useActionStore } from '@/store/ActionStore';
@@ -80,7 +80,7 @@ const form = ref<Item>({
 });
 
 
-const handleUploadImage = (event:any)=>{
+const handleUploadImage = (event)=>{
   form.value.image = event.target.files[0]
 }
 const submitForm = async () => {

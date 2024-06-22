@@ -1,25 +1,32 @@
 <template>
-  <Header></Header>
-  <div class="p-8 bg-slate-600">
-    <h1 class="text-4xl font-bold mb-8 text-center">Welcome to Our Art Store!</h1>
+  <div class="min-h-screen bg-blue-50">
+    <Header />
+    <div class="container mx-auto py-8">
+      <div class="flex justify-between items-center mb-4">
+        <h1 class="text-3xl font-bold text-blue-700">Items for Sale</h1>
+        <input
+          type="text"
+          v-model="searchQuery"
+          placeholder="Search items..."
+          class="px-4 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div
+          v-for="item in filteredItems"
+          :key="item.id"
+          class="bg-white p-6 rounded-lg shadow-md"
+        >
+          <h2 class="text-xl font-semibold text-gray-800 mb-2">{{ item.name }}</h2>
+          <img :src="item.image" class=" h-36 w-full rounded-lg" alt="">
 
-    <!-- Search input -->
-    <div class="mb-4">
-      <input v-model="searchQuery" type="text" placeholder="Search by item name" class="px-4 py-2 w-full rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 border-gray-300">
-    </div>
-
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-      <div v-for="item in filteredItems" :key="item.id" class="bg-white rounded-lg overflow-hidden shadow-md transition-transform transform hover:scale-105">
-        <div class="relative">
-          <img :src="item.image" alt="Product Image" class="w-full h-64 object-cover transition-opacity duration-300 hover:opacity-80">
-          <div class="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 opacity-0 hover:opacity-100 transition-opacity duration-300">
-            <button @click="buyItem(item)" class="bg-white text-black px-4 py-2 rounded-md font-semibold shadow-md hover:bg-gray-200 transition-colors duration-300">Buy Now</button>
-          </div>
-        </div>
-        <div class="p-4">
-          <h2 class="text-xl font-semibold mb-2">{{ item.name }}</h2>
-          <p class="text-gray-700 mb-4">{{ item.description }}</p>
-          <p class="text-indigo-600 font-bold text-xl mb-4">${{ item.price }}</p>
+          <p class="text-gray-600 mb-4">{{ item.description }}</p>
+          <button
+            @click="buyItem(item)"
+            class="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition"
+          >
+            Buy Now
+          </button>
         </div>
       </div>
     </div>
@@ -28,7 +35,7 @@
 
 
   
-<script setup lang="ts">
+<script setup>
 import { ref, onMounted, computed } from 'vue';
 import { getCollection, setDocument, setDocumentRandomId } from '@/firebase/Functions';
 import { useMainStore } from '@/store/MainStore';
