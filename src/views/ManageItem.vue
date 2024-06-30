@@ -40,7 +40,7 @@ import { auth } from '@/firebase/firebase';
 import { deleteItems } from '@/firebase/Functions';
 // Initialize items as empty array
 const mainStore = useMainStore();
-
+console.log(mainStore.user,'user')
 // Fetch items from Firestore
 const fetchItems = async () => {
   try {

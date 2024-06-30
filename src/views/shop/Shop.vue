@@ -71,7 +71,8 @@ const buyItem = async (item) => {
   try {
     // Create an order or transaction document
     const order = {
-      itemId: item.id,
+      itemId: item.documentId,
+      artistId: item.id,
       userId: mainStore.user.uid,
       status: 'pending', // Example status, can be 'pending', 'confirmed', etc.
       timestamp: new Date().toISOString(),

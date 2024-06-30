@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import { db } from './firebase'
 import { getFirestore,doc, collection,setDoc,addDoc, getDocs, getDoc, query, where, deleteDoc, updateDoc } from 'firebase/firestore'
 import { uploadBytes,ref as RRef, getDownloadURL, getStorage } from 'firebase/storage'
@@ -7,12 +9,15 @@ import { firebaseApp } from './firebase'
 import { useActionStore } from '@/store/ActionStore'
 
 
-export const getCollection = async (collectionName: string): Promise<any> => {
-    const collectionRef = collection(db, collectionName);
-    const snapshot = await getDocs(collectionRef);
-    const data = snapshot.docs.map(doc => doc.data());
-    return data;
-  }
+export const getCollection = async (collectionName: string): Promise<any[]> => {
+  const collectionRef = collection(db, collectionName);
+  const snapshot = await getDocs(collectionRef);
+  const data = snapshot.docs.map(doc => ({
+    documentId: doc.id,
+    ...doc.data()
+  }));
+  return data;
+};
   export const updateRequestStatus = async (collectionName: string, documentId: string, newStatus: any) => {
     try {
       const docRef = doc(db, collectionName, documentId);

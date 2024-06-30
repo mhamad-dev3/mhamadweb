@@ -63,14 +63,20 @@ const handleRegister = async () => {
   try {
     const user = await createUserWithEmailAndPassword(auth, email.value, password.value);
     const userId = user.user.uid;
-    mainStore.user = user.user;
+   
     await setDocument('user', userId, {
       email: email.value,
       name: name.value,
       id: userId,
       role: role.value, // Save the selected role
     });
+    mainStore.user = user.user;
+    window.localStorage.setItem('userT',JSON.stringify(mainStore.user))
+   if(role.value = 'seller'){
+    router.push({ name: 'shop' });
+   } else {
     router.push({ name: 'dashboard' });
+   }
   } catch (error: any) {
     errorState.hasError = true;
     errorState.errorMessage = 'Registration failed. Please try again.';

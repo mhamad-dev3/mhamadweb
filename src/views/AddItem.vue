@@ -23,7 +23,7 @@
               dense
             ></v-text-field>
             <v-text-field
-              label="quantity"
+              label="Quantity"
               v-model="form.quantity"
               type="number"
               required
@@ -59,18 +59,17 @@
   </div>
 </template>
 
-<script setup >
+<script setup>
 import { ref } from 'vue';
-import {Item}from "@/type/types"
 import { useActionStore } from '@/store/ActionStore';
 import { useMainStore } from '@/store/MainStore';
 import { uploadImage } from '@/firebase/Functions';
 
+const actionStore = useActionStore();
+const mainStore = useMainStore();
 
-
-const actionStore = useActionStore()
-const mainStore = useMainStore()
-const form = ref<Item>({
+// Define form as a reactive ref object
+const form = ref({
   description: '',
   id: mainStore.user.uid,
   name: '',
@@ -79,13 +78,33 @@ const form = ref<Item>({
   image: ''
 });
 
+// Handle file input change
+const handleUploadImage = (event) => {
+  form.value.image = event.target.files[0];
+};
 
-const handleUploadImage = (event)=>{
-  form.value.image = event.target.files[0]
-}
+// Submit form function
 const submitForm = async () => {
-  await uploadImage(form.value.image)
- await  actionStore.addItem(form.value)
+  try {
+    // Upload image first
+    await uploadImage(form.value.image);
+
+    // Once image is uploaded, add item using actionStore
+    await actionStore.addItem(form.value);
+
+    // Clear form fields after successful submission if needed
+    form.value.name = '';
+    form.value.price = 0;
+    form.value.quantity = 0;
+    form.value.image = '';
+    form.value.description = '';
+
+    // Optionally, show success message or navigate to another page
+    // Example: router.push('/items');
+  } catch (error) {
+    console.error('Error submitting form:', error);
+    // Handle error - show error message, log, etc.
+  }
 };
 </script>
 
