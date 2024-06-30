@@ -27,7 +27,7 @@
     </v-card>
   </template>
   <script setup lang="ts">
-  import { ref, watch } from 'vue';
+  import { ref } from 'vue';
   import { useMainStore } from '@/store/MainStore';
   import { useRouter } from 'vue-router';
   

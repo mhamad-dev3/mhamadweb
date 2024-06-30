@@ -61,15 +61,16 @@
 
 <script setup>
 import { ref } from 'vue';
+
 import { useActionStore } from '@/store/ActionStore';
 import { useMainStore } from '@/store/MainStore';
 import { uploadImage } from '@/firebase/Functions';
 
-const actionStore = useActionStore();
-const mainStore = useMainStore();
 
-// Define form as a reactive ref object
-const form = ref({
+
+const actionStore = useActionStore()
+const mainStore = useMainStore()
+const form = ref<Item>({
   description: '',
   id: mainStore.user.uid,
   name: '',

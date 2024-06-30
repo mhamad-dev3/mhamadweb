@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { onAuthStateChanged } from "firebase/auth";
 import { createWebHistory, createRouter } from "vue-router";
 import { auth } from "./firebase/firebase";

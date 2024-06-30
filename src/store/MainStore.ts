@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 
-import { getAuth, signInWithEmailAndPassword ,sendPasswordResetEmail } from "firebase/auth";
+import {  signInWithEmailAndPassword ,sendPasswordResetEmail } from "firebase/auth";
 import {auth } from "@/firebase/firebase"
 import { ref } from "vue";
 import { Item } from "@/type/types";
