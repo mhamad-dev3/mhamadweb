@@ -71,6 +71,10 @@ const submit = async ()=>{
 //   }
 // });
 watch(()=>mainStore.isLogged,(newval:boolean)=>{
-  newval === true?router.push({name:'dashboard'}):false
+  if(newval==true){
+    if(mainStore.isSeller){
+      router.push({name:'dashboard'})
+    }else {router.push({name:'shop'})}
+  }else {false}
 })
 </script>

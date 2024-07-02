@@ -65,12 +65,12 @@ import { ref } from 'vue';
 import { useActionStore } from '@/store/ActionStore';
 import { useMainStore } from '@/store/MainStore';
 import { uploadImage } from '@/firebase/Functions';
-
-
+import { useRouter } from 'vue-router';
+const router = useRouter()
 
 const actionStore = useActionStore()
 const mainStore = useMainStore()
-const form = ref<Item>({
+const form = ref({
   description: '',
   id: mainStore.user.uid,
   name: '',
@@ -102,6 +102,7 @@ const submitForm = async () => {
 
     // Optionally, show success message or navigate to another page
     // Example: router.push('/items');
+    router.go(-1)
   } catch (error) {
     console.error('Error submitting form:', error);
     // Handle error - show error message, log, etc.

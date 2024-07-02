@@ -21,11 +21,11 @@
           <img :src="item.image" class=" h-36 w-full rounded-lg" alt="">
 
           <p class="text-gray-600 mb-4">{{ item.description }}</p>
-          <button
+          <button :disabled="isId === item.documentId"
             @click="buyItem(item)"
             class="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition"
           >
-            Buy Now
+           {{isId === item.documentId?'pending':'buy now'}}
           </button>
         </div>
       </div>
@@ -43,7 +43,8 @@ import Header from '../header/Header.vue';
 const mainStore = useMainStore();
 const items = ref([]);
 const searchQuery = ref('');
-
+const isOrder = ref(false)
+const isId = ref('')
 // Fetch items on component mount
 onMounted(async () => {
   try {
@@ -87,7 +88,20 @@ const buyItem = async (item) => {
     console.error('Error buying item:', error.message);
     // Optionally, show an error message to the user
   }
+ await checkBuy(item.documentId) 
 };
+
+const checkBuy = async(id)=>{
+   const orders = await getCollection('orders')
+   orders.forEach((object)=>{
+  
+    if(object.itemId === id){
+      isOrder.value =true
+      isId.value = object.itemId
+    } else {   isOrder.value =false}
+ 
+   })
+}
 </script>
 
 

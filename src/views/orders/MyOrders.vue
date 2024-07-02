@@ -13,7 +13,7 @@
           class="bg-white p-6 rounded-lg shadow-md"
         >
           <h2 class="text-xl font-semibold text-gray-800 mb-2">{{ order.name }}</h2>
-          <img :src="order.image" class=" h-36 w-full rounded-lg" alt="">
+          <img :src="order.image" class=" h-36 w-full object-cover rounded-lg" alt="">
           <p class="text-gray-600 mb-4">{{ order.description }}</p>
           <p class="text-gray-500 mb-4">Status: {{ order.order.status }}</p>
           <button
@@ -64,7 +64,21 @@ import Header from '../header/Header.vue';
       return null;
     }
   };
-
+const fetcha = async ()=>{
+  try {
+      const fetchedOrders = await queryCollectionByField('orders', 'userId', mainStore.user.uid);
+      // Enhance fetched orders with item details
+      const ordersWithItems = await Promise.all(
+        fetchedOrders.map(async (order) => {
+          const item = await getItemDetails(order.itemId);
+          return { order, ...item };
+        })
+      );
+      orders.value = ordersWithItems;
+    } catch (error) {
+      console.error('Error fetching orders:', error.message);
+    }
+}
   const cancelOrder = async (orderId) => {
 
     try {
@@ -74,6 +88,7 @@ import Header from '../header/Header.vue';
     } catch (error) {
       console.error('Error cancelling order:', error.message);
     }
+    await fetcha()
   };
 
   const updateOrderStatus = async (orderId, newStatus) => {

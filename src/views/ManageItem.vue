@@ -82,6 +82,7 @@ fetchItems();
  const logout = async () => {
   try {
     await signOut(auth);
+    mainStore.isSeller = false
     console.log('User signed out successfully');
   } catch (error) {
     console.error('Error signing out:', error);
