@@ -2,6 +2,7 @@
   <body class="flex flex-col gap-10 pt-10 items-center ">
     <!-- <img src="/images/shopping-3d-illustration-1024x768.jpg" class="rounded-full w-52 h-52" alt=""> -->
     <h3 class="text-3xl ">Login</h3>
+    <img class="w-[300px]" src="../assets//Login-amico(1).svg" alt="">
     <v-sheet class="mx-auto w-full" max-width="300">
     <v-form  @submit.prevent="submit">
       <v-text-field

@@ -10,5 +10,6 @@ export interface Item {
     price:number,
     quantity: number,
     id: string,
-    image: string
+    image: string,
+    select: string
 }

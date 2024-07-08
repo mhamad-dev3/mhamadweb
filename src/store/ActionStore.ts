@@ -17,6 +17,7 @@ export const useActionStore = defineStore('actionStore',()=>{
                 quantity: object.quantity,
                 id: object.id,
                 image:  imageUrl.value,
+                type: object.select
             })
         }catch(error:any){
             console.log(error)

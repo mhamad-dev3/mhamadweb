@@ -49,6 +49,10 @@
               textarea
               rows="3"
             ></v-text-field>
+            <v-select v-model="form.select"
+  label="Select"
+  :items="['Paintings', 'Prints', 'Sculptures', 'Photography']"
+></v-select>
             <div class="text-center mt-6">
               <v-btn color="blue darken-1" class="white--text" type="submit">Submit</v-btn>
             </div>
@@ -76,7 +80,8 @@ const form = ref({
   name: '',
   price: 0,
   quantity: 0,
-  image: ''
+  image: '',
+  select: ''
 });
 
 // Handle file input change

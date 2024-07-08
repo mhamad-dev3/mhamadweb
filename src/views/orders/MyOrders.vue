@@ -22,6 +22,8 @@
           >
             Cancel Order
           </button>
+          <button @click="handleUpdate(order.order.id)"  :class="{'bg-red-600':!order.order.payed,'bg-green-600':order.order.payed}" class="w-full mt-5  text-white py-2 rounded-md hover:bg-red-700 transition"
+        >{{ order.order.payed?'Done':'Not paid' }}</button>
         </div>
       </div>
     </div>
@@ -32,7 +34,7 @@
  <script setup>
   import { ref, onMounted } from 'vue';
   import { useMainStore } from '@/store/MainStore';
-  import { deleteItems, getDocument, queryCollectionByField, updateRequestStatus } from '@/firebase/Functions'; // Adjust import path as per your project structure
+  import { deleteItems, getDocument, queryCollectionByField, updateDocument, updateRequestStatus } from '@/firebase/Functions'; // Adjust import path as per your project structure
 import Header from '../header/Header.vue';
   const mainStore = useMainStore();
   const orders = ref([]);
@@ -90,7 +92,22 @@ const fetcha = async ()=>{
     }
     await fetcha()
   };
-
+  const handleUpdate =async (id)=>{
+    updateDocument('orders',id,{payed:true})
+       try {
+      const fetchedOrders = await queryCollectionByField('orders', 'userId', mainStore.user.uid);
+      // Enhance fetched orders with item details
+      const ordersWithItems = await Promise.all(
+        fetchedOrders.map(async (order) => {
+          const item = await getItemDetails(order.itemId);
+          return { order, ...item };
+        })
+      );
+      orders.value = ordersWithItems;
+    } catch (error) {
+      console.error('Error fetching orders:', error.message);
+    }
+  }
   const updateOrderStatus = async (orderId, newStatus) => {
     try {
       await updateRequestStatus('orders', orderId, { status: newStatus });
@@ -100,6 +117,7 @@ const fetcha = async ()=>{
       throw error;
     }
   };
+
 </script>
 
   

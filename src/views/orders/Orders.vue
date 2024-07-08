@@ -17,13 +17,13 @@
           <p class="text-gray-600 mb-4">{{ request.product.description }}</p>
           <p :class="getStatusColor(request.status) + ' mb-4'">Status: {{ request.status }}</p>
           <div class="flex justify-between">
-            <button
+            <button  v-if="request.status !='rejected' && request.status !='approved'"
               @click="changeRequestStatus(request.id, 'approved')"
               class="bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-700 transition"
             >
               Approve
             </button>
-            <button
+            <button  v-if="request.status !='rejected' && request.status !='approved'"
               @click="changeRequestStatus(request.id, 'rejected')"
               class="bg-red-600 text-white py-2 px-4 rounded-md hover:bg-red-700 transition"
             >
